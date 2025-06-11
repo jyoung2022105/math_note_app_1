@@ -7,7 +7,7 @@ workflows:
       app_store_connect: codemagic
     environment:
       ios_signing:
-        distribution_type: app-store
+        distribution_type: app_store
         bundle_identifier: com.mobilenote.app
       xcode: latest
       node: v18
