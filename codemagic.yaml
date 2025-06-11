@@ -31,11 +31,10 @@ workflows:
     instance_type: linux
     environment:
       android_signing:
-        - key_alias: $CM_KEY_ALIAS
-          key_password: $CM_KEY_PASSWORD
+        - keystore: $CM_KEYSTORE
           keystore_password: $CM_KEYSTORE_PASSWORD
-          keystore_path: $CM_KEYSTORE_PATH
-      gradle: latest
+          key_alias: $CM_KEY_ALIAS
+          key_password: $CM_KEY_PASSWORD
       node: v18
     scripts:
       - name: Install dependencies
