@@ -1,0 +1,100 @@
+workflows:
+  ios-workflow:
+    name: iOS Build
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    integrations:
+      app_store_connect: codemagic
+    environment:
+      ios_signing:
+        distribution_type: app-store
+        bundle_identifier: com.mobilenote.app
+      xcode: latest
+      node: v18
+    scripts:
+      - name: Install dependencies
+        script: |
+          npm install
+      - name: Build iOS app
+        script: |
+          npm run build:ios
+    artifacts:
+      - build/ios/ipa/*.ipa
+    publishing:
+      email:
+        recipients:
+          - jyoung2022105@gmail.com
+
+  android-workflow:
+    name: Android Build
+    max_build_duration: 60
+    instance_type: linux
+    environment:
+      android_signing:
+        - key_alias: $CM_KEY_ALIAS
+          key_password: $CM_KEY_PASSWORD
+          keystore_password: $CM_KEYSTORE_PASSWORD
+          keystore_path: $CM_KEYSTORE_PATH
+      gradle: latest
+      node: v18
+    scripts:
+      - name: Install dependencies
+        script: |
+          npm install
+      - name: Build Android app
+        script: |
+          npm run build:android
+    artifacts:
+      - android/app/build/outputs/apk/release/*.apk
+    publishing:
+      email:
+        recipients:
+          - jyoung2022105@gmail.com
+
+  web-workflow:
+    name: Web Build
+    max_build_duration: 30
+    instance_type: linux
+    environment:
+      node: v18
+    scripts:
+      - name: Install dependencies
+        script: |
+          npm install
+      - name: Build web app
+        script: |
+          npm run build:web
+    artifacts:
+      - web-build/**/*
+    publishing:
+      email:
+        recipients:
+          - jyoung2022105@gmail.com
+
+  test-workflow:
+    name: Run Tests
+    max_build_duration: 30
+    instance_type: linux
+    environment:
+      node: v18
+    scripts:
+      - name: Install dependencies
+        script: |
+          npm install
+      - name: Run tests
+        script: |
+          npm test
+
+  lint-workflow:
+    name: Run Lint
+    max_build_duration: 30
+    instance_type: linux
+    environment:
+      node: v18
+    scripts:
+      - name: Install dependencies
+        script: |
+          npm install
+      - name: Run lint
+        script: |
+          npm run lint 
